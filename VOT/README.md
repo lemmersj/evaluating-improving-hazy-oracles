@@ -3,14 +3,14 @@ This is a repository for evaluating deferred inference on the single-target VOT 
 
 The instructions here begin with a 100 csv files (corresponding to 100 stochastic passes) for every video/annotator pair. These should be stored as:
 
-tracker_outputs/{vid_name}/{mturk/gold_standard}/stoch\_True)/{annotator}-{run\_num}.csv. Columns are frame, gt\_tlx, gt\_tly, gt\_w, gt\_h, guess\_tlx, guess\_tly, guess\_w, guess\_h.
+tracker_outputs/{vid_name}/{mturk/gold_standard}/stoch\_True)/{annotator}-{run\_num}.csv. Columns are frame, gt_tlx, gt_tly, gt_w, gt_h, guess_tlx, guess_tly, guess_w, guess_h.
 
 ## Aggregating stochastic passes
 We would like to group stochastic passes together as MoG distributions.
 
     python build_distributions.py 10 20 True
 
-`build\_distributions.py` is additionally used with `pick\_dbscan\_params.py` to perform the gridsearch for DBSCAN parameters. To do this, first follow the instructions for calculating the random and err @ 0 errors.
+`build_distributions.py` is additionally used with `pick_dbscan_params.py` to perform the gridsearch for DBSCAN parameters. To do this, first follow the instructions for calculating the random and err @ 0 errors.
 
 ## Compiling aggregated passes.
 We do a second level of aggregation to put all of the stochastic MoGs into a single pickle, making it much faster to load. this is done via:
