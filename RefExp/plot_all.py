@@ -42,8 +42,8 @@ for split in ["val","testA","testB"]:
             x = np.arange(cur_marginal.shape[0])/cur_marginal.shape[0]
             plt.plot(x, cur_marginal, label=method_to_label[method], color=method_to_color[method])
             plt.fill_between(x, cur_marginal-cur_marginal_stderr, cur_marginal+cur_marginal_stderr, color=method_to_color[method], alpha=0.5)
-        plt.xlabel("Deferral Rate (%)")
-        plt.ylabel("Mean Error")
+        plt.xlabel("Deferral Rate")
+        plt.ylabel("Mean Error (%)")
         plt.title(f"Split: {split}, DDC: {depth}")
         plt.legend()
         plt.savefig(f"single_rqd_plots/{split}-{depth}.pdf")

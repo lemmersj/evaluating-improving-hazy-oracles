@@ -128,11 +128,9 @@ ax2.set_ylim([ylim_min, ylim_max])
 
 ax2.axes.yaxis.set_visible(False)
 
-#ax1.set_title("Depth Constraint Only (Coverage Marginalized)")
-ax1.set_xlabel("Depth Constraint")
+ax1.set_xlabel("Deferral Depth Constraint")
 ax1.set_ylabel("Mean Error (%)")
-#ax2.set_title("RQR Only (Depth Marginalized)")
-ax2.set_xlabel("Re-Query Rate")
+ax2.set_xlabel("Deferral Rate")
 ax2.legend(loc=(1.1, 0.5))
 fig.set_size_inches(20, 6)
 plt.tight_layout()
@@ -164,6 +162,6 @@ for split in ["val", "testA", "testB"]:
         plt.fill_between(x,
             rqr_marginals[this_key]['mean']-rqr_marginals[this_key]['stderr'], rqr_marginals[this_key]['mean']+rqr_marginals[this_key]['stderr'], alpha=0.5)
     plt.legend()
-    plt.savefig(f"rqr_marginal_{split}.pdf")
+    plt.savefig(f"dr_marginal_{split}.pdf")
     plt.clf()
 
