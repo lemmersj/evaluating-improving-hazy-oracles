@@ -1,4 +1,4 @@
-"""Calculate the pertarget random accuracy of all models.
+"""Calculate the deferral-free accuracy of all models.
 
 Table 1, as of the time this comment was written.
 

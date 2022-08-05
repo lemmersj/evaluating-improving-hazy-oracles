@@ -1,13 +1,14 @@
-"""Uses the compiled pickle to plot marginals.
+"""Uses the compiled pickle to generate a CSV of ARE metrics.
 
-Figure 5 the time of this writing.
+Tables 2 and 5 at the time of this writing.
 
 Typical usage:
-    python plot_marginals.py armae_arrays/compiled.pickle
+    python build_big_csv.py armae_arrays/compiled.pickle
 """
 import pickle
 import sys
 import numpy as np
+import pdb
 import matplotlib.pyplot as plt
 
 plt.rc('axes',titlesize=24)
@@ -25,6 +26,8 @@ dist_dict = {1: 'softmax', 2: 'varratio', 3:'dropout', 4:'dropout_textonly',
 with open(pickle_file, "rb") as infile:
     data = pickle.load(infile)
 
+# 3D integration.
+# Dict of dicts. First key is the actual method, second key is RQ depth.
 with_depth_dict = {}
 for key in data:
     split_key = key.split("_")
@@ -41,27 +44,19 @@ for key in data:
 depth_marginals = {}
 for method in with_depth_dict:
     method_areas_under = []
-    # Use 100 different trials. At each trial, calculate the marginals using
-    # a random shuffling of examples at each depth.
     for trial in range(100):
         current_areas_under = []
-        # At every depth constraint, pick a random run
-        # And calculate teh area under that curve.
         for depth_constraint in range(1, 11):
             row = np.random.randint(with_depth_dict[method][depth_constraint]['errors'].shape[0])
-            current_areas_under.append(
-                with_depth_dict[method][depth_constraint]['errors'][row, :].mean())
-        # Then save the area under the curve at each depth constraint.
+            current_areas_under.append(with_depth_dict[method][depth_constraint]['errors'][row, :].mean())
+        
         method_areas_under.append(np.array(current_areas_under))
 
-    # Save in a dict for plotting.
     depth_marginals[method] = {}
     depth_marginals[method]['mean'] = (np.array(method_areas_under)*100).mean(axis=0)
-    depth_marginals[method]['stderr'] = (np.array(method_areas_under)*100).std(
-        axis=0)/np.sqrt(len(method_areas_under))
+    depth_marginals[method]['stderr'] = (np.array(method_areas_under)*100).std(axis=0)/np.sqrt(len(method_areas_under))
 
 # rqr_marginals
-# Process is the same as above.
 rqr_marginals = {}
 for method in with_depth_dict:
     method_areas_under = []
@@ -70,18 +65,16 @@ for method in with_depth_dict:
         for depth_constraint in range(1, 11):
             row = np.random.randint(with_depth_dict[method][depth_constraint]['errors'].shape[0])
             current_areas_under.append(with_depth_dict[method][depth_constraint]['errors'][row, :])
-
+        
         method_areas_under.append(np.array(current_areas_under).mean(axis=0))
 
     rqr_marginals[method] = {}
     rqr_marginals[method]['mean'] = (np.array(method_areas_under)*100).mean(axis=0)
-    rqr_marginals[method]['stderr'] = (np.array(method_areas_under)*100).std(
-        axis=0)/np.sqrt(len(method_areas_under))
+    rqr_marginals[method]['stderr'] = (np.array(method_areas_under)*100).std(axis=0)/np.sqrt(len(method_areas_under))
 
-# Do the actual plotting.
 x = [*range(1, 11)]
-split = "testB" # Select the split
-fig, (ax1, ax2) = plt.subplots(1, 2)
+split = "testB"
+fig, (ax1, ax2) = plt.subplots(1, 2) 
 for this_key in depth_marginals.keys():
     if split not in this_key:
         continue
@@ -100,10 +93,8 @@ for this_key in depth_marginals.keys():
         color = "#648FFF"
 
     ax1.plot(x, depth_marginals[this_key]['mean'], label=legend_name, marker="o", color=color)
-    ax1.fill_between(x,
-        depth_marginals[this_key]['mean']-depth_marginals[this_key]['stderr'],
-                     depth_marginals[this_key]['mean']+depth_marginals[this_key]['stderr'],
-                     alpha=0.5, color=color)
+    ax1.fill_between(x, 
+        depth_marginals[this_key]['mean']-depth_marginals[this_key]['stderr'], depth_marginals[this_key]['mean']+depth_marginals[this_key]['stderr'], alpha=0.5, color=color)
     ax1.set_xticks(x)
 
 for this_key in depth_marginals.keys():
@@ -122,14 +113,10 @@ for this_key in depth_marginals.keys():
         color = "#785EF0"
     elif "mean" in legend_name:
         color = "#648FFF"
-    x = np.array([*range(len(rqr_marginals[this_key]['mean']))])/len(
-        rqr_marginals[this_key]['mean'])
-    ax2.plot(x, rqr_marginals[this_key]['mean'],\
-             label=legend_name, linewidth=0.5, color=color)
+    x = np.array([*range(len(rqr_marginals[this_key]['mean']))])/len(rqr_marginals[this_key]['mean'])
+    ax2.plot(x, rqr_marginals[this_key]['mean'], label=legend_name, linewidth=0.5, color=color)
     ax2.fill_between(x,
-        rqr_marginals[this_key]['mean']-rqr_marginals[this_key]['stderr'],\
-                     rqr_marginals[this_key]['mean']+\
-                     rqr_marginals[this_key]['stderr'], alpha=0.5, color=color)
+        rqr_marginals[this_key]['mean']-rqr_marginals[this_key]['stderr'], rqr_marginals[this_key]['mean']+rqr_marginals[this_key]['stderr'], alpha=0.5, color=color)
 
 ax1_ylim = ax1.get_ylim()
 ax2_ylim = ax2.get_ylim()
@@ -143,7 +130,7 @@ ax2.axes.yaxis.set_visible(False)
 
 #ax1.set_title("Depth Constraint Only (Coverage Marginalized)")
 ax1.set_xlabel("Depth Constraint")
-ax1.set_ylabel("Mean Error")
+ax1.set_ylabel("Mean Error (%)")
 #ax2.set_title("RQR Only (Depth Marginalized)")
 ax2.set_xlabel("Re-Query Rate")
 ax2.legend(loc=(1.1, 0.5))
@@ -152,3 +139,31 @@ plt.tight_layout()
 plt.savefig("marginals.pdf")
 
 plt.clf()
+x = [*range(1, 11)]
+for split in ["val", "testA", "testB"]:
+    for this_key in depth_marginals.keys():
+        if split not in this_key:
+            continue
+        if "3" not in this_key:
+            continue
+        plt.plot(x, depth_marginals[this_key]['mean'], label=this_key, marker="o")
+        plt.fill_between(x, 
+            depth_marginals[this_key]['mean']-depth_marginals[this_key]['stderr'], depth_marginals[this_key]['mean']+depth_marginals[this_key]['stderr'], alpha=0.5)
+    plt.legend()
+    plt.savefig(f"depth_marginal_{split}.pdf")
+    plt.clf()
+
+for split in ["val", "testA", "testB"]:
+    for this_key in depth_marginals.keys():
+        if split not in this_key:
+            continue
+        if "3" not in this_key:
+            continue
+        x = np.array([*range(len(rqr_marginals[this_key]['mean']))])/len(rqr_marginals[this_key]['mean'])
+        plt.plot(x, rqr_marginals[this_key]['mean'], label=this_key)
+        plt.fill_between(x,
+            rqr_marginals[this_key]['mean']-rqr_marginals[this_key]['stderr'], rqr_marginals[this_key]['mean']+rqr_marginals[this_key]['stderr'], alpha=0.5)
+    plt.legend()
+    plt.savefig(f"rqr_marginal_{split}.pdf")
+    plt.clf()
+

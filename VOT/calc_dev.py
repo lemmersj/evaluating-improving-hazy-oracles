@@ -67,7 +67,7 @@ for method in run_dict:
     acc_1 = method_where_not_zero[:, -1, :].mean()
     acc_1_stderr = method_where_not_zero[:, -1, :].std()/np.sqrt(len(where_not_zero))
     # print results
-    print(f"{method}-AU: {au_metric}+-{au_stderr}. Acc1: {acc_1}+-{acc_1_stderr}")
+    print(f"{method}-DEV: {au_metric}+-{au_stderr}. Acc@1: {acc_1}+-{acc_1_stderr}")
 
     # Now calc and plot the marginals
     rqr_marginal = method_where_not_zero.mean(axis=0)

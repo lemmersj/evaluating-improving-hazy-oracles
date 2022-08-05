@@ -70,7 +70,7 @@ for group in groups:
 
             all_rq_counts = np.zeros((len(draw['target_ids'])+1), dtype=int)
 
-            # Loop through all allowed re-queries.
+            # Loop through until DDC.
             # We use a while loop here, since some methods require multiple
             # queries per-update.
             while all_rq_counts.sum() < len(draw['target_ids']):
@@ -82,7 +82,7 @@ for group in groups:
                 replacement = get_re_by_target(
                     draw['target_ids'][to_requery], dbo.cur)
 
-                # Update the seed based on the replacement method.
+                # Update the belief based on the selection fn.
 
                 # In naive replacement, we always use the replacement seed.
                 if "naive" in replacement_method:

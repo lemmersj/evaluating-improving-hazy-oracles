@@ -1,4 +1,4 @@
-"""Calculate the best accuracy of all models.
+"""Calculate the perfect deferral accuracy of all models.
 
 Table 1, as of the time this comment was written
 

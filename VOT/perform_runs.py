@@ -1,7 +1,7 @@
 """Calculates the error at all constraints.
 
 Data is saved as a pickle containing a numpy array of dimension 10 x 101 x 100.
-The first dimension is the RQD constraint, the second is the error @ rqr, and
+The first dimension is the DDC, the second is the error @ rqr, and
 the third is the run number. The output pickle only fills in one element of
 the last dimension, and all output files can simply be summed together,
 allowing for parallelization.
@@ -99,9 +99,9 @@ def do_pass(compiled_pickle, depth_constraint, cur_pass, method, dataset):
         # Keep track of videos in the pytracking library form.
         vid_list.append(video)
 
-    # And calculate the IoU at zero RQR.
+    # And calculate the IoU at zero DR.
     rqr_ious.append(np.array(iou_list).mean())
-    # We've drawn the first set of prophecies. Now start doing the replacement.
+    # We've drawn the first set of human inputs. Now start doing the replacement.
     for i in range(len(iou_list)):
         # select the video to re-query. The one with the lowest score.
         vid_to_replace = np.array(score_list).argmin()
@@ -162,9 +162,9 @@ def do_pass(compiled_pickle, depth_constraint, cur_pass, method, dataset):
             iou_list[vid_to_replace] = new_vid_iou
         elif "ensemble_mean" in method:
             # We can't just rely on the outer loop, because every iteration
-            # adds multiple RQRs.
-            # So instead, count the number of re-queries, and break when
-            # RQR=1
+            # adds multiple deferrals.
+            # So instead, count the number of deferrals, and break when
+            # DR=1
             if np.array(rq_counts).sum() > len(iou_list):
                 rqr_ious = rqr_ious[:len(iou_list) + 1]
                 break
@@ -172,13 +172,13 @@ def do_pass(compiled_pickle, depth_constraint, cur_pass, method, dataset):
             # Increment RQ counts.
             rq_counts[vid_to_replace] += depth_constraint
 
-            # The process for RQ is to pull N distributions,
+            # The process for deferral is to pull N distributions,
             # each of which is stored in the these_dists list.
             these_dists = []
             # Add the original human input.
             these_dists.append(dist_list[vid_to_replace])
 
-            # and add the number of required RQs
+            # and add the number of required deferrals
             for _ in range(depth_constraint):
                 annot_2 = random.choice(all_annots)
                 these_dists.append(

@@ -1,4 +1,4 @@
-"""Calculates the no-deferral (rqr @ 0 and best) performance of the VOT tracker."""
+"""Calculates the deferral-free and perfect rejection error of the VOT tracker."""
 import csv
 import random
 import numpy as np

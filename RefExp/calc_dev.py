@@ -20,7 +20,7 @@ with open(pickle_file, "rb") as infile:
     data = pickle.load(infile)
 
 # 3D integration.
-# Dict of dicts. First key is the actual method, second key is RQ depth.
+# Dict of dicts. First key is the method, second key is DDC.
 with_depth_dict = {}
 for key in data:
     split_key = key.split("_")
@@ -64,7 +64,7 @@ for method in with_depth_dict:
         np.array(method_accs_1)*100).std()/np.sqrt(len(method_accs_1))
 
 with open("performance.csv", "w") as csv_file:
-    csv_file.write("split,net,source,dist,score,selection,AU,stderr,err@1,stderr\n")
+    csv_file.write("split,net,source,dist,score,selection,DEV,stderr,err@1,stderr\n")
     for key in ares_and_keys:
         # A manual split of the keys back to semantic information
         split_key = key.split("-")
