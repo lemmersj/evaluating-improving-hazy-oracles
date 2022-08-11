@@ -49,7 +49,7 @@ for method in with_depth_dict:
         for depth_constraint in range(1, 11):
             row = np.random.randint(with_depth_dict[method][depth_constraint]['errors'].shape[0])
             current_areas_under.append(with_depth_dict[method][depth_constraint]['errors'][row, :].mean())
-        
+
         method_areas_under.append(np.array(current_areas_under))
 
     depth_marginals[method] = {}
@@ -65,7 +65,7 @@ for method in with_depth_dict:
         for depth_constraint in range(1, 11):
             row = np.random.randint(with_depth_dict[method][depth_constraint]['errors'].shape[0])
             current_areas_under.append(with_depth_dict[method][depth_constraint]['errors'][row, :])
-        
+
         method_areas_under.append(np.array(current_areas_under).mean(axis=0))
 
     rqr_marginals[method] = {}
@@ -74,7 +74,7 @@ for method in with_depth_dict:
 
 x = [*range(1, 11)]
 split = "testB"
-fig, (ax1, ax2) = plt.subplots(1, 2) 
+fig, (ax1, ax2) = plt.subplots(1, 2)
 for this_key in depth_marginals.keys():
     if split not in this_key:
         continue
@@ -93,7 +93,7 @@ for this_key in depth_marginals.keys():
         color = "#648FFF"
 
     ax1.plot(x, depth_marginals[this_key]['mean'], label=legend_name, marker="o", color=color)
-    ax1.fill_between(x, 
+    ax1.fill_between(x,
         depth_marginals[this_key]['mean']-depth_marginals[this_key]['stderr'], depth_marginals[this_key]['mean']+depth_marginals[this_key]['stderr'], alpha=0.5, color=color)
     ax1.set_xticks(x)
 
