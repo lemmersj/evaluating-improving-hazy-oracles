@@ -18,5 +18,9 @@ Many AI systems integrate sensor inputs, world knowledge, and human-provided inf
 ## Repository Structure
 We divide this repository into three sections, based on the underlying application:
 
-1. [VOT](VOT): containing experimental code and data for the VOT task.
-2. [RefExp](RefExp): Containing experimental code and data for the RefExp task.
+1. [VOT](VOT): containing experimental code for the VOT task.
+2. [RefExp](RefExp): Containing experimental code for the RefExp task.
+
+We provide the raw output of our models, as well as DR-Error plots at specific DDCs, in [this zip file](https://drive.google.com/file/d/1GNXR6rN6--NHo7jPsENztqfQRu-1t4Qk/view?usp=sharing).
+
+
