@@ -1,7 +1,7 @@
 # Deferred Inference (VOT)
 This is a repository for evaluating deferred inference on the single-target VOT task. All of the files in this directory should be dropped into the pytracking directory of the [pytracking](https://github.com/visionml/pytracking) repository. Conda environment is stored in environment.yaml
 
-The instructions here begin with a 100 csv files (corresponding to 100 stochastic passes) for every video/annotator pair. These should be stored as:
+The instructions here begin with a 100 csv files (corresponding to 100 stochastic passes) for every video/annotator pair ([found here](https://drive.google.com/file/d/1SZEmmw0I-AxHJVN-UetmmRM1TU8hUKTU/view?usp=sharing)). These should be stored as:
 
 tracker\_outputs/{vid\_name}/{mturk/gold\_standard}/stoch\_True)/{annotator}-{run\_num}.csv. Columns are frame, gt\_tlx, gt\_tly, gt\_w, gt\_h, guess\_tlx, guess\_tly, guess\_w, guess\_h.
 
