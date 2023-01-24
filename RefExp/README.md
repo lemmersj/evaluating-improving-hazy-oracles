@@ -57,7 +57,7 @@ Evaluation scripts are based on model outputs saved to a sqlite database. The da
 
 ![Schema](documentation/re_eval_schema.png)
 
-A populated database is found [here](https://drive.google.com/file/d/1apxjh3pyT64xrS2bFaOMENIekwq7-Z5F/view?usp=sharing), and should be downloaded to data/redatabase.sqlite3. It can also be be generated from the data/ReDatabase.sql file. To produce the database schema from scratch, first download the refcoco expressions from the (refer api)[https://github.com/lichengunc/refer]. We use refs(unc).p in the refcoco.zip file. And the (MSCOCO dataset)[https://cocodataset.org], then run ``python populate_dataset_tables.py``. Unfortunately, there are a handful of hardlinks in the code that must be addressed.
+A populated database is found [here](https://drive.google.com/file/d/1apxjh3pyT64xrS2bFaOMENIekwq7-Z5F/view?usp=sharing), and should be downloaded to data/redatabase.sqlite3. It can also be be generated from the data/ReDatabase.sql file. To produce the database schema from scratch, first download the refcoco expressions from the [refer api](https://github.com/lichengunc/refer). We use refs(unc).p in the refcoco.zip file. And the [MSCOCO dataset](https://cocodataset.org), then run ``python populate_dataset_tables.py``. Unfortunately, there are a handful of hardlinks in the code that must be addressed.
 
 To populate a new database with UNITER data, we refer to the original [UNITER](https://www.github.com/chenrocks/UNITER) codebase. For other architectures, the included code should be able to perform all required analysis, given the input conforms to the above schema.
 
